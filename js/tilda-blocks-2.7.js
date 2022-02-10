@@ -1,3 +1,27 @@
+// Polyfill: Element.matches
+if (!Element.prototype.matches) {
+  Element.prototype.matches =
+      Element.prototype.matchesSelector ||
+      Element.prototype.msMatchesSelector ||
+      Element.prototype.mozMatchesSelector ||
+      Element.prototype.webkitMatchesSelector ||
+      Element.prototype.oMatchesSelector;
+}
+
+// Polyfill: Element.closest
+if (!Element.prototype.closest) {
+  Element.prototype.closest = function (s) {
+      var el = this;
+      while (el && el.nodeType === 1) {
+          if (Element.prototype.matches.call(el, s)) {
+              return el;
+          }
+          el = el.parentElement || el.parentNode;
+      }
+      return null;
+  };
+}
+
 /**
 * Инициализация блока
 * @param {node} recid - id блока
